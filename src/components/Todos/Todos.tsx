@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Task } from "../../model";
 import SingleTodo from "../SingleTodo/SingleTodo";
 
@@ -7,20 +8,44 @@ interface Props {
 }
 
 const Todos = ({ allTask, setAllTask }: Props) => {
-  // --- handle task done or not ---
+  const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+
+  // --- handler task done or not ---
   const handleTaskComplete = (id: number) => {
     if (id) {
       const updateCheck = allTask.map((task) =>
         task.id === id ? { ...task, isDone: !task.isDone } : task
       );
       setAllTask(updateCheck);
+      setEditingTaskId(null);
     }
   };
 
-  //   --- handle delete task ---
+  //   --- handler delete task ---
   const handleDeleteTask = (id: number) => {
     const remainingTasks = allTask.filter((task) => task.id !== id);
     setAllTask(remainingTasks);
+  };
+
+  //   --- edit input field toggler handler ---
+  const handleEditClick = (taskId: number) => {
+    // Toggle the edit mode for the specific task
+    setEditingTaskId(editingTaskId === taskId ? null : taskId);
+  };
+
+  const handleEditTask = (
+    e: React.FormEvent<HTMLFormElement>,
+    editedTask: string,
+    id: number
+  ) => {
+    e.preventDefault();
+    const updateTask = allTask.map((task) =>
+      task.id === id ? { ...task, task: editedTask } : task
+    );
+    if (updateTask) {
+      setAllTask(updateTask);
+      setEditingTaskId(null);
+    }
   };
 
   return (
@@ -29,8 +54,12 @@ const Todos = ({ allTask, setAllTask }: Props) => {
         <SingleTodo
           key={task.id}
           task={task}
+          setAllTask={setAllTask}
           handleTaskComplete={handleTaskComplete}
           handleDeleteTask={handleDeleteTask}
+          handleEditTask={handleEditTask}
+          handleEditClick={handleEditClick}
+          editingTaskId={editingTaskId}
         />
       ))}
     </div>
