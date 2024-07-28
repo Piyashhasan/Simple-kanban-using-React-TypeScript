@@ -1,0 +1,25 @@
+/* --- font family link --- */
+@import url("https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;500;600;700;800;900;1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Playwrite+DK+Loopet:wght@100..400&display=swap");
+
+/* --- Basic css class --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: rgb(32, 120, 219);
+}
+
+/* --- Reusable class --- */
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+.input_box:focus {
+  box-shadow: 0 0 10px 100vh rgb(0, 0, 0, 0.5);
+  outline: none;
+}
