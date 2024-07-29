@@ -33,7 +33,7 @@ const Todos = ({ allTask, setAllTask }: Props) => {
     setEditingTaskId(editingTaskId === taskId ? null : taskId);
   };
 
-  const handleEditTask = (
+  const handleEditFormSubmit = (
     e: React.FormEvent<HTMLFormElement>,
     editedTask: string,
     id: number
@@ -57,7 +57,7 @@ const Todos = ({ allTask, setAllTask }: Props) => {
           setAllTask={setAllTask}
           handleTaskComplete={handleTaskComplete}
           handleDeleteTask={handleDeleteTask}
-          handleEditTask={handleEditTask}
+          handleEditFormSubmit={handleEditFormSubmit}
           handleEditClick={handleEditClick}
           editingTaskId={editingTaskId}
         />

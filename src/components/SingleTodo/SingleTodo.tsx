@@ -3,13 +3,14 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { Task } from "../../model";
 import { useState } from "react";
+import EditTaskForm from "../EditTaskForm/EditTaskForm";
 
 interface Props {
   task: Task;
   setAllTask: React.Dispatch<React.SetStateAction<Task[]>>;
   handleTaskComplete: (id: number) => void;
   handleDeleteTask: (id: number) => void;
-  handleEditTask: (
+  handleEditFormSubmit: (
     e: React.FormEvent<HTMLFormElement>,
     updateTask: string,
     id: number
@@ -22,7 +23,7 @@ const SingleTodo = ({
   task,
   handleTaskComplete,
   handleDeleteTask,
-  handleEditTask,
+  handleEditFormSubmit,
   handleEditClick,
   editingTaskId,
 }: Props) => {
@@ -40,17 +41,12 @@ const SingleTodo = ({
           ) : (
             <div className="break-word text-[14px]">
               {editingTaskId === task.id ? (
-                <form
-                  onSubmit={(e: React.FormEvent<HTMLFormElement>) =>
-                    handleEditTask(e, editTask, task.id)
-                  }
-                >
-                  <input
-                    onChange={(e) => setEditTask(e.target.value)}
-                    type="text"
-                    value={editTask}
-                  />
-                </form>
+                <EditTaskForm
+                  task={task}
+                  editTask={editTask}
+                  setEditTask={setEditTask}
+                  handleEditFormSubmit={handleEditFormSubmit}
+                />
               ) : (
                 `${task.task}`
               )}
