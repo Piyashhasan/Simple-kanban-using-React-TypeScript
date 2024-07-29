@@ -31,47 +31,45 @@ const SingleTodo = ({
   const [editTask, setEditTask] = useState<string>(task.task);
 
   return (
-    <div>
-      <div className="bg-yellow-400 p-5 rounded-md flex justify-between">
-        <div>
-          {task.isDone ? (
-            <p className="break-word text-[14px]">
-              <s>{task.task}</s>
-            </p>
-          ) : (
-            <div className="break-word text-[14px]">
-              {editingTaskId === task.id ? (
-                <EditTaskForm
-                  task={task}
-                  editTask={editTask}
-                  setEditTask={setEditTask}
-                  handleEditFormSubmit={handleEditFormSubmit}
-                />
-              ) : (
-                `${task.task}`
-              )}
-            </div>
-          )}
+    <div className="bg-yellow-400 p-5 rounded-md flex justify-between">
+      <div>
+        {task.isDone ? (
+          <p className="break-word text-[14px]">
+            <s>{task.task}</s>
+          </p>
+        ) : (
+          <div className="break-word text-[14px]">
+            {editingTaskId === task.id ? (
+              <EditTaskForm
+                task={task}
+                editTask={editTask}
+                setEditTask={setEditTask}
+                handleEditFormSubmit={handleEditFormSubmit}
+              />
+            ) : (
+              `${task.task}`
+            )}
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-3">
+        <div
+          onClick={() => handleEditClick(task.id)}
+          className="cursor-pointer"
+        >
+          <CiEdit className="text-[18px]" />
         </div>
-        <div className="flex items-center gap-3">
-          <div
-            onClick={() => handleEditClick(task.id)}
-            className="cursor-pointer"
-          >
-            <CiEdit className="text-[18px]" />
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => handleDeleteTask(task.id)}
-          >
-            <FaRegTrashCan className="text-[18px]" />
-          </div>
-          <div
-            className="cursor-pointer"
-            onClick={() => handleTaskComplete(task.id)}
-          >
-            <FaCheck className="text-[18px]" />
-          </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => handleDeleteTask(task.id)}
+        >
+          <FaRegTrashCan className="text-[18px]" />
+        </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => handleTaskComplete(task.id)}
+        >
+          <FaCheck className="text-[18px]" />
         </div>
       </div>
     </div>
