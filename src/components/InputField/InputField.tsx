@@ -27,6 +27,7 @@ const InputField = ({ task, setTask, handleSubmit }: Props) => {
             className="w-full px-8 py-5 rounded-full outline-none input_box"
             type="text"
             placeholder="Type your task..."
+            required
           />
 
           <button className="bg-[#84a1ec] text-white w-[50px] h-[50px] rounded-full cursor-pointer text-[18px] font-semibold absolute right-2 top-2 shadow-xl hover:bg-[#6d8cdb] transition-all ease-in-out duration-200 active:w-[45px] active:h-[45px] active:text-[16px] active:top-3">
