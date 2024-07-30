@@ -30,7 +30,7 @@ function App() {
         KANBAN
       </h1>
       <InputField task={task} setTask={setTask} handleSubmit={handleSubmit} />
-      <Todos allTask={allTask} setAllTask={setAllTask}/>
+      <Todos allTask={allTask} setAllTask={setAllTask} />
     </main>
   );
 }

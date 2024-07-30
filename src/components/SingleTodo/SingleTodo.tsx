@@ -7,7 +7,7 @@ import EditTaskForm from "../EditTaskForm/EditTaskForm";
 
 interface Props {
   task: Task;
-  setAllTask: React.Dispatch<React.SetStateAction<Task[]>>;
+  // setAllTask: React.Dispatch<React.SetStateAction<Task[]>>;
   handleTaskComplete: (id: number) => void;
   handleDeleteTask: (id: number) => void;
   handleEditFormSubmit: (

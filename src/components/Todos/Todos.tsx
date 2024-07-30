@@ -14,8 +14,8 @@ interface Props {
 }
 
 const Todos = ({ allTask, setAllTask }: Props) => {
-  const [completedTask, setCompletedTask] = useState<Task[]>([]);
   const [editingTaskId, setEditingTaskId] = useState<number | null>(null);
+  const [completedTask, setCompletedTask] = useState<Task[]>([]);
 
   // --- handler task done or not ---
   const handleTaskComplete = (id: number) => {
@@ -23,15 +23,26 @@ const Todos = ({ allTask, setAllTask }: Props) => {
       const updateCheck = allTask.map((task) =>
         task.id === id ? { ...task, isDone: !task.isDone } : task
       );
+
+      const updateCheckForCompleteTask = completedTask.map((task) =>
+        task.id === id ? { ...task, isDone: !task.isDone } : task
+      );
+
       setAllTask(updateCheck);
+      setCompletedTask(updateCheckForCompleteTask);
       setEditingTaskId(null);
     }
   };
 
   //   --- handler delete task ---
   const handleDeleteTask = (id: number) => {
-    const remainingTasks = allTask.filter((task) => task.id !== id);
-    setAllTask(remainingTasks);
+    const remainingActiveTasks = allTask.filter((task) => task.id !== id);
+    const remainingCompletedTasks = completedTask.filter(
+      (task) => task.id !== id
+    );
+
+    setAllTask(remainingActiveTasks);
+    setCompletedTask(remainingCompletedTasks);
   };
 
   //   --- edit input field toggler handler ---
@@ -49,36 +60,70 @@ const Todos = ({ allTask, setAllTask }: Props) => {
     const updateTask = allTask.map((task) =>
       task.id === id ? { ...task, task: editedTask } : task
     );
-    if (updateTask) {
+    const updateCompletedTask = completedTask.map((task) =>
+      task.id === id ? { ...task, task: editedTask } : task
+    );
+    if (updateTask || updateCompletedTask) {
       setAllTask(updateTask);
+      setCompletedTask(updateCompletedTask);
       setEditingTaskId(null);
     }
   };
 
   // --- Drag & Drop functionality ---
   const onDragEnd = (result: DropResult) => {
-    console.log(result);
+    const { source, destination } = result;
+
+    if (!destination) return;
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    // --- card swap functionality ---
+    let add;
+    const activeTask = allTask;
+    const completeTask = completedTask;
+
+    if (source.droppableId === "activeTask") {
+      add = activeTask[source.index];
+      activeTask.splice(source.index, 1);
+    } else {
+      add = completeTask[source.index];
+      completeTask.splice(source.index, 1);
+    }
+
+    if (destination.droppableId === "activeTask") {
+      activeTask.splice(destination.index, 0, add);
+    } else {
+      completeTask.splice(destination.index, 0, add);
+    }
+    setCompletedTask(completeTask);
+    setAllTask(activeTask);
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mt-10 px-3">
         <div className="bg-[#33C3CD] p-5 rounded-md self-start">
+          <h2 className="text-white text-[24px] font-['Playwrite_DK_Loopet'] mb-5">
+            Active Tasks
+          </h2>
           <Droppable droppableId="activeTask">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <h2 className="text-white text-[24px] font-['Playwrite_DK_Loopet']">
-                  Active Tasks
-                </h2>
                 {allTask.map((task, index) => (
                   <Draggable
-                    key={task.id}
+                    key={task.id.toString()}
                     draggableId={task.id.toString()}
                     index={index}
                   >
                     {(provided) => (
                       <div
-                        className="mb-2 mt-5"
+                        className="mb-2"
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -86,7 +131,7 @@ const Todos = ({ allTask, setAllTask }: Props) => {
                         <SingleTodo
                           key={task.id}
                           task={task}
-                          setAllTask={setAllTask}
+                          // setAllTask={setAllTask}
                           handleTaskComplete={handleTaskComplete}
                           handleDeleteTask={handleDeleteTask}
                           handleEditFormSubmit={handleEditFormSubmit}
@@ -104,21 +149,21 @@ const Todos = ({ allTask, setAllTask }: Props) => {
         </div>
 
         <div className="bg-[#EB6751] p-5 rounded-md self-start">
+          <h2 className="text-white text-[24px] font-['Playwrite_DK_Loopet'] mb-5">
+            Completed Tasks
+          </h2>
           <Droppable droppableId="completeTask">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                <h2 className="text-white text-[24px] font-['Playwrite_DK_Loopet']">
-                  Completed Tasks
-                </h2>
                 {completedTask.map((task, index) => (
                   <Draggable
-                    key={task.id}
+                    key={task.id.toString()}
                     draggableId={task.id.toString()}
                     index={index}
                   >
                     {(provided) => (
                       <div
-                        className="mb-2 mt-5"
+                        className="mb-2"
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -126,12 +171,12 @@ const Todos = ({ allTask, setAllTask }: Props) => {
                         <SingleTodo
                           key={task.id}
                           task={task}
-                          setAllTask={setCompletedTask}
+                          // setAllTask={setAllTask}
                           handleTaskComplete={handleTaskComplete}
                           handleDeleteTask={handleDeleteTask}
                           handleEditFormSubmit={handleEditFormSubmit}
-                          handleEditClick={handleEditClick}
                           editingTaskId={editingTaskId}
+                          handleEditClick={handleEditClick}
                         />
                       </div>
                     )}
