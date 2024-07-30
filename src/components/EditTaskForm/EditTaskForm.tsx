@@ -9,6 +9,8 @@ interface Props {
     updateTask: string,
     id: number
   ) => void;
+
+  editInputFocus: React.RefObject<HTMLInputElement>;
 }
 
 const EditTaskForm = ({
@@ -16,11 +18,14 @@ const EditTaskForm = ({
   editTask,
   setEditTask,
   handleEditFormSubmit,
+  editInputFocus,
 }: Props) => {
   return (
-    <div>
+    <div className="">
       <form onSubmit={(e) => handleEditFormSubmit(e, editTask, task.id)}>
         <input
+          ref={editInputFocus}
+          className="outline-none bg-yellow-400 w-80 md:w-44 lg:w-80"
           onChange={(e) => setEditTask(e.target.value)}
           type="text"
           value={editTask}

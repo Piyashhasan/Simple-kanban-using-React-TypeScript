@@ -20,16 +20,16 @@ const Todos = ({ allTask, setAllTask }: Props) => {
   // --- handler task done or not ---
   const handleTaskComplete = (id: number) => {
     if (id) {
-      const updateCheck = allTask.map((task) =>
+      const doneToggledActiveTask = allTask.map((task) =>
         task.id === id ? { ...task, isDone: !task.isDone } : task
       );
 
-      const updateCheckForCompleteTask = completedTask.map((task) =>
+      const doneToggledCompletedTask = completedTask.map((task) =>
         task.id === id ? { ...task, isDone: !task.isDone } : task
       );
 
-      setAllTask(updateCheck);
-      setCompletedTask(updateCheckForCompleteTask);
+      setAllTask(doneToggledActiveTask);
+      setCompletedTask(doneToggledCompletedTask);
       setEditingTaskId(null);
     }
   };
@@ -57,15 +57,15 @@ const Todos = ({ allTask, setAllTask }: Props) => {
     id: number
   ) => {
     e.preventDefault();
-    const updateTask = allTask.map((task) =>
+    const editActiveTask = allTask.map((task) =>
       task.id === id ? { ...task, task: editedTask } : task
     );
-    const updateCompletedTask = completedTask.map((task) =>
+    const editCompletedTask = completedTask.map((task) =>
       task.id === id ? { ...task, task: editedTask } : task
     );
-    if (updateTask || updateCompletedTask) {
-      setAllTask(updateTask);
-      setCompletedTask(updateCompletedTask);
+    if (editActiveTask || editCompletedTask) {
+      setAllTask(editActiveTask);
+      setCompletedTask(editCompletedTask);
       setEditingTaskId(null);
     }
   };
@@ -113,8 +113,14 @@ const Todos = ({ allTask, setAllTask }: Props) => {
             Active Tasks
           </h2>
           <Droppable droppableId="activeTask">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`p-2 rounded-md ${
+                  snapshot.isDraggingOver ? "bg-[#01DCE8]" : ""
+                }`}
+              >
                 {allTask.map((task, index) => (
                   <Draggable
                     key={task.id.toString()}
@@ -131,7 +137,6 @@ const Todos = ({ allTask, setAllTask }: Props) => {
                         <SingleTodo
                           key={task.id}
                           task={task}
-                          // setAllTask={setAllTask}
                           handleTaskComplete={handleTaskComplete}
                           handleDeleteTask={handleDeleteTask}
                           handleEditFormSubmit={handleEditFormSubmit}
@@ -153,8 +158,14 @@ const Todos = ({ allTask, setAllTask }: Props) => {
             Completed Tasks
           </h2>
           <Droppable droppableId="completeTask">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className={`p-2 rounded-md ${
+                  snapshot.isDraggingOver ? "bg-[#F72700]" : ""
+                }`}
+              >
                 {completedTask.map((task, index) => (
                   <Draggable
                     key={task.id.toString()}
@@ -171,7 +182,6 @@ const Todos = ({ allTask, setAllTask }: Props) => {
                         <SingleTodo
                           key={task.id}
                           task={task}
-                          // setAllTask={setAllTask}
                           handleTaskComplete={handleTaskComplete}
                           handleDeleteTask={handleDeleteTask}
                           handleEditFormSubmit={handleEditFormSubmit}

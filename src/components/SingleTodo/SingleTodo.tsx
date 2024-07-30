@@ -2,12 +2,11 @@ import { CiEdit } from "react-icons/ci";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa6";
 import { Task } from "../../model";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EditTaskForm from "../EditTaskForm/EditTaskForm";
 
 interface Props {
   task: Task;
-  // setAllTask: React.Dispatch<React.SetStateAction<Task[]>>;
   handleTaskComplete: (id: number) => void;
   handleDeleteTask: (id: number) => void;
   handleEditFormSubmit: (
@@ -30,6 +29,11 @@ const SingleTodo = ({
   // --- edit task input filed visible toggler ---
   const [editTask, setEditTask] = useState<string>(task.task);
 
+  const editInputFocus = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    editInputFocus.current?.focus();
+  }, [editingTaskId]);
+
   return (
     <div className="bg-yellow-400 p-5 rounded-md flex justify-between">
       <div>
@@ -45,6 +49,7 @@ const SingleTodo = ({
                 editTask={editTask}
                 setEditTask={setEditTask}
                 handleEditFormSubmit={handleEditFormSubmit}
+                editInputFocus={editInputFocus}
               />
             ) : (
               `${task.task}`
@@ -57,7 +62,7 @@ const SingleTodo = ({
           onClick={() => handleEditClick(task.id)}
           className="cursor-pointer"
         >
-          <CiEdit className="text-[18px]" />
+          <CiEdit className="text-[20px]" />
         </div>
         <div
           className="cursor-pointer"

@@ -15,7 +15,7 @@ const InputField = ({ task, setTask, handleSubmit }: Props) => {
           handleSubmit(e);
           inputRef.current?.blur();
         }}
-        className="flex justify-center mt-5"
+        className="flex justify-center mt-5 px-3"
       >
         <div className="w-full max-w-[500px] relative">
           <input
