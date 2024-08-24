@@ -1,4 +1,4 @@
-![Kanban Board](https://piyashhasan-portfolio.netlify.app/images/projects/hekto-furniture.jpg)
+![Kanban Board](https://piyashhasan-portfolio.netlify.app/images/projects/simple-kanban.jpg)
 
 **[Live link](https://taskify-kanban.netlify.app/)**
 
